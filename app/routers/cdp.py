@@ -28,6 +28,21 @@ async def get_cdp(stt: int, db: Session = Depends(get_db)):
     return cdp
 
 
+# need /code/{codecdp}
+# Otherwise will fetch /{stt} above
+@router.get(
+    "/code/{codecdp}", response_model=List[schema.CDPForm]
+)  # Path parameter {code} is a string
+async def get_cdp_code(codecdp: str, db: Session = Depends(get_db)):
+    cdp = db.query(models.CDP).filter(models.CDP.code == codecdp).all()
+    if not cdp:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={"message": "not found your request"},
+        )
+    return cdp
+
+
 # Get Post Message and put into a pydantic format (Post) which name is "new_post"
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schema.CDPForm)
 async def create_cdp(
@@ -49,6 +64,15 @@ async def create_cdp(
             status_code=status.HTTP_403_FORBIDDEN,
             detail={"message": "you are not allowed"},
         )
+    cdp_query = db.query(models.CDP).filter(models.CDP.code == new_cdp.code).first()
+    if cdp_query:
+        if cdp_query.depositor != new_cdp.depositor:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={"message": "not found your request"},
+            )
+        else:
+            new_cdp.amount = -cdp_query.amount * (1 - new_cdp.margin)
     newCDPFetch = models.CDP(**new_cdp.dict())
     db.add(newCDPFetch)
     db.commit()

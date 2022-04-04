@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 from typing import Optional
 from datetime import datetime
 
@@ -89,6 +89,8 @@ class CDPForm(BaseModel):
     depositor_pre: str
     depositor_suf: str
     amount: int
+    margin: float
+    code: str
     published: bool = False
     created_at: datetime
 
@@ -101,7 +103,21 @@ class CDPCreate(BaseModel):
     depositor_pre: str
     depositor_suf: str
     amount: int
+    margin: float
+    code: str
     published: bool = False
+
+    @validator("margin")
+    def check_margin(cls, m):
+        if m > 1 or m < 0:
+            raise ValueError("value must <= 1 or > 0")
+        return m
+
+    @validator("code")
+    def check_code(cls, c):
+        if len(c) < 8:
+            raise ValueError("Not Correct code")
+        return c
 
 
 class CDPUpdate(BaseModel):

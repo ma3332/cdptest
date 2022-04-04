@@ -1,6 +1,6 @@
 from .database import Base
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, FLOAT
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
 
@@ -59,3 +59,5 @@ class CDP(Base):
     created_at = Column(
         TIMESTAMP(timezone=True), nullable=False, server_default=text("NOW()")
     )
+    margin = Column(FLOAT(precision=10, decimal_return_scale=None), nullable=False)
+    code = Column(String, nullable=False)
