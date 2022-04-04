@@ -73,6 +73,12 @@ async def create_cdp(
             )
         else:
             new_cdp.amount = -cdp_query.amount * (1 - new_cdp.margin)
+    else:
+        if new_cdp.margin != 1:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={"message": "Margin of 1st time code must = 1"},
+            )
     newCDPFetch = models.CDP(**new_cdp.dict())
     db.add(newCDPFetch)
     db.commit()
