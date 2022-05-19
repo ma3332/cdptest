@@ -3,7 +3,7 @@ from typing import Optional, List
 from . import models, schema
 from .database import engine, get_db
 from sqlalchemy.orm import Session
-from .routers import post, user, vote, cdp
+from .routers import post, user, vote, cdp, cdppayback
 from .config import setting
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,7 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# origins = ["https://www.google.com"]
+# origins = ["https://www.google.com"] : allow access our API from google.com only
 
 # [CORS] All domains can access our API, otherwise CORS will prevent domains from different sources access our API
 origins = ["*"]
@@ -37,6 +37,8 @@ app.include_router(user.router)
 app.include_router(vote.router)
 
 app.include_router(cdp.router)
+
+app.include_router(cdppayback.router)
 
 
 @app.get("/")

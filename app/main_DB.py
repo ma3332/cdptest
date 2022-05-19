@@ -87,7 +87,7 @@ async def get_post(id: int):
 @app.post("/posts", status_code=status.HTTP_201_CREATED)
 async def create_posts(new_post: PostForm):
 
-    # This is for state change
+    # This is for state change, using SQL command
     cursor.execute(
         """INSERT INTO posts(title, content, published) VALUES (%s, %s, %s) RETURNING * """,
         (new_post.title, new_post.content, new_post.published),

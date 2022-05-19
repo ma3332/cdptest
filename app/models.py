@@ -61,3 +61,15 @@ class CDP(Base):
     )
     margin = Column(FLOAT(precision=10, decimal_return_scale=None), nullable=False)
     code = Column(String, nullable=False)
+
+
+class CDPPayBack(Base):
+    __tablename__ = "cdppayback"
+    STT = Column(Integer, primary_key=True)
+    depositor = Column(String, nullable=False)
+    amount = Column(Integer, nullable=False)
+    code = Column(String, nullable=False)
+    published = Column(Boolean, server_default="False", nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), nullable=False, server_default=text("NOW()")
+    )

@@ -122,3 +122,27 @@ class CDPCreate(BaseModel):
 
 class CDPUpdate(BaseModel):
     published: bool = False
+
+
+class CDPPayBackForm(BaseModel):
+    STT: int
+    depositor: str
+    amount: int
+    code: str
+    published: bool = False
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+
+class CDPPayBackCreate(BaseModel):
+    depositor: str
+    amount: int
+    code: str
+    created_at: datetime
+    published: bool = False
+
+
+class CDPPackBackUpdate(CDPUpdate):
+    pass

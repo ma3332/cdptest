@@ -21,7 +21,7 @@ async def get_posts_with_votes(
         .group_by(models.PostForm.id)
         .all()
     )
-    print(posts_votes_count)
+    print(type(posts_votes_count))
     return posts_votes_count
 
 
